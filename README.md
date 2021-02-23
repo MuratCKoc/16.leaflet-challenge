@@ -14,4 +14,4 @@ This project displays earthquakes recorded by the USGS over the past week on and
 
 ### Screenshots
 
-![Outdoor View](static/images/ss.png)
+![Outdoor View](static/Images/ss.png)
