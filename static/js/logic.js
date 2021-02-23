@@ -71,6 +71,7 @@ function generateMap(earthquakes) {
 /**
  * 
  * @param {object} features 
+ * @param {object} Leaflet layer
  */
 function generateCircles(features,eqLayer) {
     for (var i = 0; i < features.length; i++) {
@@ -95,8 +96,8 @@ function generateCircles(features,eqLayer) {
 }
 
 /**
- * 
- * @param {number} depth 
+ * @returns {string} Color codes
+ * @param {number} Magnitude
  */
 function getColor(dp) {
     return dp > 40 ? "#ff0303":
@@ -107,10 +108,10 @@ function getColor(dp) {
         "#99ff40";
 }
 
-
 /**
- * 
- * @param {string} mapbox layer type
+ * Generate Layers from mapbox
+ * @returns {object} Layer 
+ * @param {string} Layer - layer type
  */
 function generateLayers(layer_id) {
     var m_id = "mapbox/"+layer_id
