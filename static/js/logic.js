@@ -88,7 +88,8 @@ function generateCircles(features,eqLayer) {
         })
     .bindPopup("<h2>"+features[i].properties.title+
     "</h2><h3>Type: "+ features[i].properties.type+"</h3>"+
-    "<h3>Magnitude: "+ features[i].properties.mag+"</h3")
+    "<h3>Magnitude: "+ features[i].properties.mag+"</h3>"+
+    "<h3>Date: "+ new Date(features[i].properties.time)+"</h3>")
     .addTo(eqLayer)
     }
 }
