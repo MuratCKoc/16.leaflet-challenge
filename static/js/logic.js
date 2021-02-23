@@ -46,14 +46,18 @@ function generateMap(earthquakes) {
         collapsed: false
     }).addTo(myMap);
 
-    var info = L.control({
-        position: "topright"
-    });
+    legendArea = L.control();
 
-    info.onAdd = function() {
+    legendArea.onAdd = function (map) {
         return L.DomUtil.create("div","info");
     }
-    info.addTo(myMap)
+
+    var legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create("div","legend info"), mag = [0,25,50,90]
+    }
+    
 
 }
 
@@ -85,11 +89,12 @@ function generateCircles(features,eqLayer) {
  * @param {number} depth 
  */
 function getColor(dp) {
-    return dp > 90 ? "#ff0303":
-        dp > 75 ? "#ff8040":
-        dp > 50 ? "#ffcc40":
-        dp > 25 ? "#efff40":
-        dp > 0 ? "#a3fa57":
+    console.log(dp)
+    return dp > 40 ? "#ff0303":
+        dp > 25 ? "#ff8040":
+        dp > 15 ? "#ffcc40":
+        dp > 10 ? "#efff40":
+        dp > 5 ? "#a3fa57":
         "#99ff40";
 }
 
