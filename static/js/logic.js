@@ -18,7 +18,7 @@ function generateMap(earthquakes) {
     // Create new map and a layer
     var myMap = L.map("map", {
         center: [19.8968,-180.5828],
-        zoom: 3,
+        zoom: 4,
         layers: [eqLayer]
     });
 
@@ -55,16 +55,15 @@ function generateMap(earthquakes) {
     var legend = L.control({ position: "bottomright" });
 
     legend.onAdd = function (map) {
-        var div = L.DomUtil.create("div","legend info"), mag = [0,10,15,20,40]
-        div.innerHTML = '<p>Magnitude</p>'
+        var div = L.DomUtil.create("div","legend info"), mag = [0,5,10,15,20,40]
+        div.innerHTML = '<p>Magnitudes</p>'
     
     for (var i =0; i<mag.length;i++) {
-        div.innerHTML += '<i style="background:'+getColor(mag[i])+'"></i>' +
-        +mag[i]+
-        (mag[i+1]?'&ndash;'+mag[i+1]+'<br>':'+');
+        div.innerHTML += '<i style="background:'+getColor(mag[i]+1)+'"></i>' +
+        +mag[i]+ (mag[i+1]?'&ndash;'+mag[i+1]+'<br>':'+');
     }
     return div;
-    }
+    };
     legend.addTo(myMap)
 }
 
