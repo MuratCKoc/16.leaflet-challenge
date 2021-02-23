@@ -55,10 +55,17 @@ function generateMap(earthquakes) {
     var legend = L.control({ position: "bottomright" });
 
     legend.onAdd = function (map) {
-        var div = L.DomUtil.create("div","legend info"), mag = [0,25,50,90]
-    }
+        var div = L.DomUtil.create("div","legend info"), mag = [0,10,15,20,40]
+        div.innerHTML = '<p>Magnitude</p>'
     
-
+    for (var i =0; i<mag.length;i++) {
+        div.innerHTML += '<i style="background:'+getColor(mag[i])+'"></i>' +
+        +mag[i]+
+        (mag[i+1]?'&ndash;'+mag[i+1]+'<br>':'+');
+    }
+    return div;
+    }
+    legend.addTo(myMap)
 }
 
 /**
@@ -79,7 +86,9 @@ function generateCircles(features,eqLayer) {
         fillColor: color,
         radius: radius
         })
-    .bindPopup("<h1>"+features[i].properties.title+"</h1><h3>Type: "+ features[i].properties.type+"</h3>")
+    .bindPopup("<h2>"+features[i].properties.title+
+    "</h2><h3>Type: "+ features[i].properties.type+"</h3>"+
+    "<h3>Magnitude: "+ features[i].properties.mag+"</h3")
     .addTo(eqLayer)
     }
 }
@@ -89,7 +98,6 @@ function generateCircles(features,eqLayer) {
  * @param {number} depth 
  */
 function getColor(dp) {
-    console.log(dp)
     return dp > 40 ? "#ff0303":
         dp > 25 ? "#ff8040":
         dp > 15 ? "#ffcc40":
