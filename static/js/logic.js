@@ -69,7 +69,7 @@ function generateMap(earthquakes) {
 }
 
 /**
- * 
+ * Create circles on the layer from data
  * @param {object} features 
  * @param {object} Leaflet layer
  */
@@ -96,6 +96,7 @@ function generateCircles(features,eqLayer) {
 }
 
 /**
+ * Generates color depending on magnitudes
  * @returns {string} Color codes
  * @param {number} Magnitude
  */
