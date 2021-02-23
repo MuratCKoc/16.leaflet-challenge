@@ -7,17 +7,53 @@ d3.json(url, function(data) {
     generateMap(data)
 })
 
-// Create a new layer
-var eqLayer = new L.layerGroup();
-
 /**
  * Generates Map
  * @param {json} earthquakes 
  */
 function generateMap(earthquakes) {
-    var features = earthquakes.features
 
-    generateCircles(features)
+    // Create earthquake layer group
+    var eqLayer = new L.layerGroup();
+    // Create new map and a layer
+    var myMap = L.map("map", {
+        center: [19.8968,-180.5828],
+        zoom: 3,
+        layers: [eqLayer]
+    });
+
+    // Base tile layers
+    var satelliteMap = generateLayers("satellite-v9").addTo(myMap);
+    var grayscaleMap = generateLayers("light-v9").addTo(myMap);
+    var outdoorMap = generateLayers("outdoors-v10").addTo(myMap);
+
+    var baseMaps = {
+        "Satellite":satelliteMap,
+        "Grayscale": grayscaleMap,
+        "Outdoor": outdoorMap
+    };
+
+    var overlayMaps= {
+        "Earthquakes":eqLayer
+    }
+
+    //Populate earthquake layer
+    var features = earthquakes.features;
+    generateCircles(features,eqLayer)
+    
+
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+    }).addTo(myMap);
+
+    var info = L.control({
+        position: "topright"
+    });
+
+    info.onAdd = function() {
+        return L.DomUtil.create("div","info");
+    }
+    info.addTo(myMap)
 
 }
 
@@ -25,21 +61,21 @@ function generateMap(earthquakes) {
  * 
  * @param {object} features 
  */
-function generateCircles(features) {
+function generateCircles(features,eqLayer) {
     for (var i = 0; i < features.length; i++) {
-        var radius = features[i].properties.mag * 2.2
+        var radius = features[i].properties.mag * 2000
         var color = getColor(features[i].geometry.coordinates[2])
         var long = features[i].geometry.coordinates[0]
         var lat = features[i].geometry.coordinates[1]
 
     // Add circle markers to earthquake_layer
     L.circle([lat,long], {
-        fillOpacity: 0.4,
+        fillOpacity: 0.75,
         color: color,
         fillColor: color,
         radius: radius
         })
-    .bindPopup("<h4>"+features[i].properties.title+"</h4><h4>Type: "+ features[i].properties.type+"</h4>")
+    .bindPopup("<h1>"+features[i].properties.title+"</h1><h3>Type: "+ features[i].properties.type+"</h3>")
     .addTo(eqLayer)
     }
 }
@@ -60,20 +96,18 @@ function getColor(dp) {
 
 /**
  * 
- * @param {string} baselayers
+ * @param {string} mapbox layer type
  */
-function generateBaselayers(layer_id) {
-
+function generateLayers(layer_id) {
+    var m_id = "mapbox/"+layer_id
+    console.log(m_id)
+    var layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: m_id,
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: API_KEY
+    });
+    return layer
 }
-
-
-
-//d3.json(url).then(function(data) {})
-//     console.log(data.features)
-// });
-
-// // API call to gather earthquakes for the past 30 days
-// d3.json(url).then(function(data) {
-//     var earthquakes = data.features
-//     console.log(earthquakes)
-// })
